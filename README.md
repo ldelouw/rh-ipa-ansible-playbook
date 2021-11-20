@@ -27,7 +27,7 @@ The first playbook installs the software and creates a certficate signing reques
 an upstream CA to get signed. The resulting CSR will be fetched to files/<ipa-hostname>-ipa.csr
 
 ```
-ansible-playbook 01-setup-master.yml
+ansible-playbook --ask-vault 01-setup-master.yml
 ```
 ### First Master Part II
 ```
@@ -44,24 +44,24 @@ cat ipa-ca.crt >> chain.crt
 
 ### Replicas
 ```
-ansible-playbook 03-setup-replicas.yml
+ansible-playbook --ask-vault 03-setup-replicas.yml
 ```
 
 ### Config
 ```
-ansible-playbook 04-config.yml
+ansible-playbook --ask-vault 04-config.yml
 ```
 
 ### Rename hosts 
 This playbook is *NOT* idempotent, do only run it once during implementation/migration phase!
 
 ```
-ansible-playbook 05-rename-hosts-nicht-idempotent.yml
+ansible-playbook --ask-vault 05-rename-hosts-not-idempotent.yml
 ```
 
 ### Enroll Clients
 ```
-ansible-playbook 06-enroll-clients.yml
+ansible-playbook --ask-vault 06-enroll-clients.yml
 ```
 
 ## Additional playbooks
