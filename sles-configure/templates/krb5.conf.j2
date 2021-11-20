@@ -1,0 +1,40 @@
+[plugins]
+ localauth = {
+  module = sssd:/usr/lib64/sssd/modules/sssd_krb5_localauth_plugin.so
+ }
+
+
+[libdefaults]
+  default_realm = {{ ipaserver_realm }}
+  dns_lookup_realm = true
+  dns_lookup_kdc = true
+  rdns = false
+  dns_canonicalize_hostname = false
+  ticket_lifetime = 24h
+  forwardable = true
+  udp_preference_limit = 0
+  canonicalize = true
+  default_ccache_name = KEYRING:persistent:%{uid}
+
+[realms]
+  {{ ipaserver_realm }} = {
+    pkinit_anchors = FILE:/etc/ipa/ca.crt
+    pkinit_pool = FILE:/etc/ipa/ipa.crt
+
+  }
+
+[{{ ipaserver_realm }}]
+  .{{ ipaserver_domain }} = {{ ipaserver_realm }}
+  {{ ipaserver_domain }} = {{ ipaserver_realm }}
+  {{ ansible_host }} = {{ ipaserver_realm }}
+
+[domain_realm]
+.{{ windows_domain }} = {{ windows_realm }}
+{{ windows_domain }} = {{ windows_realm }}
+[capaths]
+{{ windows_realm }} = {
+  {{ ipaserver_realm }} = {{ windows_realm }}
+}
+{{ ipaserver_realm }} = {
+  {{ windows_realm }} = {{ windows_realm }}
+}

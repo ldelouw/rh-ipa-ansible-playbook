@@ -1,0 +1,25 @@
+---
+# tasks file for usergroup-mappings
+
+- name: Add group ad_users
+  ipagroup:
+    ipaadmin_password: "{{ ipaadmin_password }}"
+    name: ad_users
+
+- name: Add group ad_users_ext
+  ipagroup:
+    ipaadmin_password: "{{ ipaadmin_password }}"
+    name: ad_users_ext
+    external: yes
+    externalmember: 
+    - "'{{ windows_realm}}'\\Domain Users"
+    - "'{{ windows_realm }}'\\test"
+
+- name: Add group ad_users_ext to ad_users
+  ipagroup:
+    ipaadmin_password: "{{ ipaadmin_password }}"
+    name: ad_users
+    group: ad_users_ext
+
+
+

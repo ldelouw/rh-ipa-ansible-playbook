@@ -1,0 +1,9 @@
+---
+  - name: Add HBAC rule to allow admins to access IPA-servers
+    ipahbacrule:
+      ipaadmin_password: "{{ ipaadmin_password }}"
+      name: hbac-allow_admins_ipaservers
+      description: "Allows users of the group admins to administer the IPA Domain"
+      hostgroup: ipaservers
+      servicecategory: "all"
+      group: admins

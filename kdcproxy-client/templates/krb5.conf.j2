@@ -1,0 +1,44 @@
+includedir /etc/krb5.conf.d/
+includedir /var/lib/sss/pubconf/krb5.include.d/
+ 
+[libdefaults]
+  default_realm = {{ ipaserver_realm }}
+  dns_lookup_realm = true
+  dns_lookup_kdc = true
+  rdns = false
+  dns_canonicalize_hostname = false
+  ticket_lifetime = 24h
+  forwardable = true
+  udp_preference_limit = 0
+  default_ccache_name = KEYRING:persistent:%{uid}
+
+
+[realms]
+  {{ ipaserver_realm }} = {
+    pkinit_anchors = FILE:/var/lib/ipa-client/pki/kdc-ca-bundle.pem
+    pkinit_pool = FILE:/var/lib/ipa-client/pki/ca-bundle.pem
+
+  }
+ 
+###### Start of relevant blocks ###################
+ 
+{{ windows_realm }} = {
+kdc = https://{{ groups['ipaserver'] | first }}/KdcProxy
+{% for host in groups['ipareplicas'] %}
+kdc = https://{{ host }}/KdcProxy
+{% endfor %}
+
+kpasswd_server = https://{{ groups['ipaserver'] | first }}/KdcProxy
+{% for host in groups['ipareplicas'] %}
+kpasswd_server = https://{{ host }}/KdcProxy
+{% endfor %}
+
+}
+ 
+###### Ende of relevant blocks ###################
+
+[domain_realm]
+ .{{ ipaserver_domain }} = {{ ipaserver_realm }}
+ {{ ipaserver_domain }} = {{ ipaserver_realm }}
+ {{ ansible_fqdn }} = {{ ipaserver_realm }}
+

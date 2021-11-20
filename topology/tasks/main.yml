@@ -1,0 +1,17 @@
+---
+  - name: Add topology segment                                                  
+    ipatopologysegment:                                                         
+      ipaadmin_password: "{{ ipaadmin_password }}"                              
+      suffix: domain                                                            
+      left: "{{ ipaserver }}"
+      right: "{{ ipareplica_server_name }}"
+      state: present                                                            
+                                                                                
+  - name: Add topology segment                                                  
+    ipatopologysegment:                                                         
+      ipaadmin_password: "{{ ipaadmin_password }}"                              
+      suffix: ca                                                                
+      left: "{{ ipareplica_server_name }}"
+      right: "{{ ipaserver }}"
+      state: present                                                            
+                                                                                

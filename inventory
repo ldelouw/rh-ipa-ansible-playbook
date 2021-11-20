@@ -1,0 +1,11 @@
+[ipaserver]
+ipa1.example.com
+
+[ipareplicas]
+ipa2.example.com
+
+[ipaclients]
+ipaclient.example.com
+
+[sles_clients]
+sles15.example.com

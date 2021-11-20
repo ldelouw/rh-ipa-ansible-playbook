@@ -1,0 +1,27 @@
+- hosts: ipaserver
+  vars_files:
+    - ./vars.yml
+    - ./secrets.yml
+
+  roles:
+    - role: config
+      state: present
+      tags: config
+
+    - role: localadmins
+      state: present
+      tags: localadmins
+
+    - role: hostgroups
+      state: present
+      tags: hostgroups
+
+    - role: hbac
+      state: absent
+      tags: hbac
+
+    - role: sudoers
+      state: absent
+      tags: sudoers
+
+

@@ -1,0 +1,18 @@
+- hosts: ipaclients
+  vars_files:
+    - ./vars.yml
+    - ./secrets.yml
+
+  roles:
+    - role: rename-hosts
+      state: present
+      tags: rename-hosts
+
+    - role: ipaclient
+      state: present
+      tags: ipaclient
+
+#    - role: kdcproxy-client
+#      state: present
+#      tags: kdcproxy-client
+

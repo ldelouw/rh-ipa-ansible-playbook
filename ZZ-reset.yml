@@ -1,0 +1,13 @@
+- hosts: ipaclients:ipaserver:ipareplicas
+  vars_files:
+    - ./vars.yml
+  roles:
+  - role: ipclients
+    state: absent
+
+  - role: ipareplica
+    state: absent
+
+  - role: ipaserver
+    state: absent
+

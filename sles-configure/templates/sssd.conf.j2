@@ -1,0 +1,30 @@
+[domain/{{ ipaserver_domain }}]
+
+cache_credentials = True
+krb5_store_password_if_offline = True
+ipa_domain = {{ ipaserver_domain }}
+id_provider = ipa
+auth_provider = ipa
+access_provider = ipa
+ipa_hostname = {{ ansible_host }}
+chpass_provider = ipa
+ipa_server = _srv_, {{ ipaserver }}
+ldap_tls_cacert = /etc/ipa/ca.crt
+[sssd]
+services = nss, sudo, pam, ssh
+
+domains = {{ ipaserver_domain }}
+[nss]
+homedir_substring = /home
+
+[pam]
+
+[sudo]
+
+[autofs]
+
+[ssh]
+
+[ifp]
+
+[secrets]

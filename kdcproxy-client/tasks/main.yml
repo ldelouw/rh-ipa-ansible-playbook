@@ -1,0 +1,6 @@
+---
+
+- name: Configuring krb5.conf to make use of KdcProxy
+  template:
+    src: templates/krb5.conf.j2
+    dest: /etc/krb5.conf

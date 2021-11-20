@@ -1,0 +1,5 @@
+---
+- name: Define bash as the default shell
+  ipaconfig:
+    ipaadmin_password: "{{ ipaadmin_password }}"
+    defaultshell: "{{ defaultshell }}"

@@ -1,0 +1,4 @@
+---
+  - name: Renaming hosts from XYZ.{{ ansible_domain }} to XYZ.{{ domain_prefix }}.{{ ansible_domain }}
+    hostname: 
+      name: "{{ ansible_hostname }}.{{ domain_prefix }}.{{ ansible_domain }}"

@@ -1,0 +1,26 @@
+- hosts: ipaserver
+  vars_files:
+    - ./vars.yml
+    - ./secrets.yml
+
+  vars:
+
+  roles:
+    - role: ipaserver
+      state: present
+#    - role: kdcproxy-server
+#      state: present
+
+  pre_tasks:                                                                    
+    - name: Copy CA-Chain certificate                                           
+      copy:                                                                     
+        src: files/ca.crt                                                    
+        dest: /root/ca.crt  
+
+  post_tasks:
+    - name: Disable host based firewall
+      systemd:
+        state: stopped
+        enabled: no
+        name: firewalld
+

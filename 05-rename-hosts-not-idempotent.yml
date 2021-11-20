@@ -1,0 +1,11 @@
+# Note: This playbook is not idempotent, just run it once when you need to
+# rename your client hosts.
+
+- hosts: ipaclients
+  vars_files:
+    - ./vars.yml
+  roles:
+    - role: rename-hosts
+      state: present
+      tags: rename-hosts
+

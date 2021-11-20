@@ -1,0 +1,34 @@
+- hosts: ipareplicas
+  vars_files:
+    - ./vars.yml
+    - ./secrets.yml
+
+  roles:
+    - role: ipareplica
+      state: present
+      tags: ipareplica
+
+#    - role: kdcproxy-server
+#      state: present
+#      tags: kdcproxy-server
+#
+#    - role: topology
+#      state: present
+#      tags: topology
+
+  pre_tasks:
+    - name: Copy cert file                                                      
+      copy:                                                                     
+        src: files/{{ ipaserver }}-key-and-crt.pem                           
+        dest: /root/{{ ipaserver }}-key-and-crt.pem                          
+                                                                                
+    - name: copy ca.crt                                                         
+      copy:                                                                     
+       src: files/ca.crt                                                       
+       dest: /root/ca.crt 
+
+    - name: Disable host based firewall
+      systemd:
+        state: stopped
+        enabled: no
+        name: firewalld
