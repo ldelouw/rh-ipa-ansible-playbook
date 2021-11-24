@@ -5,7 +5,7 @@ ipaserver_realm: EXAMPLE.COM
 ipaserver_domain: example.com
 ipareplica_domain: example.com
 
-# Server and replica relates stuff
+# Server and replica related stuff
 ipaadmin_principal: admin
 ipaserver: ipa1.example.com
 ipareplica_server_name: ipa2.example.com
@@ -31,6 +31,14 @@ ipareplica_forwarders: {{ ipaserver_forwarders }}
 # remove this
 ipaserver_allow_zone_overlap: true
 
+global_dns_resolvers:
+  - 1.2.3.4
+  - 1.2.3.5
+
+windows_domain_dns_resolvers:
+  - 1.2.3.6
+  - 1.2.3.7
+
 # Client related stuff
 ipaclient_mkhomedir: true
 ipaclient_no_ntp: true
@@ -40,3 +48,98 @@ ipaclient_ssh_trust_dns: true
 sles_client:
   - { name: sles15.example.com, ip: 192.168.100.195 }
   - { name: sles15sp2.example.com, ip: 192.168.100.181 }
+
+# User and group related stuff:
+localgroups:
+  - name: superusers
+    user:
+      - jbond
+      - jdoe
+  - name: webadmins
+  - name: dbadmins
+
+localadmins:
+  - name: jbond
+    first: James
+    last: Bond
+    password: changeit
+  - name: jdoe
+    first: John
+    last: Doe
+    password: changeit
+
+# Mappings from AD Groups to IPA groups
+usergroup_mappings:
+  - name: ad-grp-webadmins
+    description: Web Administrators
+    ipagroup: webadmins
+  - name: ad-grp-dbadmins
+    description: Database Administrators
+    ipagroup: dbadmins
+
+# Hostgroups:
+hostgroup_list:
+  - name: dbserver
+  - name: webserver
+
+# HBAC rules:
+hbacrule_list:
+  - name: allow_all
+    enabled: false
+  - name: allow_webadmins_webservers
+    description: Allow web administrators to login to webserver systems
+    group: webadmins
+    hostgroup: webserver
+    enabled: true
+  - name: allow_dbadmins_dbservers
+    description: Allow databse administrators to login to database systems
+    group: dbadmins
+    hostgroup: dbserver
+    enabled: true
+  - name: allow_admins_ipaservers
+    description: Allow members of admins group to login to IPA servers
+    group: admins
+    hostgroup: ipaservers
+    enabled: true
+  - name: allow_superusers_all
+    description: Allow members of superusers group to login to all servers in IPA domain
+    group: superusers
+    hostcategory: "all"
+    enabled: true
+
+# Sudo related stuff:
+sudocommandgroups:
+  - name: webadmincommands
+    description: Web adminstration commands
+    command_list:
+      - name: /usr/bin/systemctl stop httpd
+        description: Stop HTTP Server
+      - name: /usr/bin/systemctl start httpd
+        description: Start HTTP Server
+      - name: /usr/bin/systemctl restart httpd
+        description: Restart HTTP Server
+      - name: /usr/bin/systemctl stop apache2
+        description: Stop HTTP Server on SLES
+      - name: /usr/bin/systemctl start apache2
+        description: Start HTTP Server on SLES
+      - name: /usr/bin/systemctl restart apache2
+        description: Restart HTTP Server on SLES
+  - name: dbadmincommands
+    description: Database adminstration commands
+    command_list:
+      - name: /usr/bin/systemctl stop postgresql
+        description: Stop HTTP Server
+      - name: /usr/bin/systemctl start postgresql
+        description: Start HTTP Server
+      - name: /usr/bin/systemctl restart postgresql
+        description: Restart HTTP Server
+
+sudorules:
+  - name: webadminrule
+    description: Allow web administrators to manage web servers
+    usergroup: webadmins
+    allow_sudocmdgroup: webadmincommands
+  - name: dbadminrule
+    description: Allow database administrators to manage database servers
+    usergroup: dbadmins
+    allow_sudocmdgroup: dbadmincommands
