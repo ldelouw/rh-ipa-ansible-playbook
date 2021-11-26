@@ -1,3 +1,4 @@
+---
 # Note: This playbook is not idempotent, just run it once when you need to
 # rename your client hosts.
 
@@ -8,4 +9,3 @@
     - role: rename-hosts
       state: present
       tags: rename-hosts
-

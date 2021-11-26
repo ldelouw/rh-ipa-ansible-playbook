@@ -1,3 +1,4 @@
+---
 # Realms and domain settings
 windows_realm: WIN.EXAMPLE.COM
 windows_domain: win.example.com
@@ -11,15 +12,15 @@ ipaserver: ipa1.example.com
 ipareplica_server_name: ipa2.example.com
 ipaserver_setup_adtrust: true
 ipareplica_setup_adtrust: true
-ipareplica_setup_firewalld: no
-ipareplica_install_packages: yes
+ipareplica_setup_firewalld: false
+ipareplica_install_packages: true
 domain_prefix: linux
 
 # CA related stuff
-ipareplica_setup_ca: no
-ipaserver_no_pkinit: yes
-ipareplica_no_pkinit: yes
-ipaserver_external_ca: no
+ipareplica_setup_ca: false
+ipaserver_no_pkinit: true
+ipareplica_no_pkinit: true
+ipaserver_external_ca: false
 ipaserver_dirsrv_cert_files: "/root/{{ ipaserver }}-key-and-crt.pem"
 ipaserver_http_cert_files: "/root/{{ ipaserver }}-key-and-crt.pem"
 ipareplica_dirsrv_cert_files: "/root/{{ ipareplica_server_name }}-key-and-crt.pem"
@@ -31,7 +32,7 @@ ipaserver_setup_dns: true
 ipareplica_setup_dns: true
 ipaserver_forwarders: 1.1.1.1
 ipareplica_forwarders: "{{ ipaserver_forwarders }}"
-# Evil, but needed in the lab when using example.com for production usage 
+# Evil, but needed in the lab when using example.com for production usage
 # remove this
 ipaserver_allow_zone_overlap: true
 ipaserver_no_dnssec_validation: true
@@ -53,8 +54,10 @@ ipaclient_ssh_trust_dns: true
 
 # Mapping of hostnames and IP Addresses
 sles_client:
-  - { name: sles15.example.com, ip: 192.168.100.195 }
-  - { name: sles15sp2.example.com, ip: 192.168.100.181 }
+  - name: sles15.example.com
+    ip: 192.168.100.195
+  - name: sles15sp2.example.com
+    ip: 192.168.100.181
 
 # User and group related stuff:
 localgroups:

@@ -1,3 +1,4 @@
+---
 - hosts: ipaserver
   vars_files:
     - ./vars.yml

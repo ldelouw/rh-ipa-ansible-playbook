@@ -1,4 +1,4 @@
 ---
-  - name: Renaming hosts from XYZ.{{ ansible_domain }} to XYZ.{{ domain_prefix }}.{{ ansible_domain }}
-    hostname: 
-      name: "{{ ansible_hostname }}.{{ domain_prefix }}.{{ ansible_domain }}"
+- name: "Renaming hosts from XYZ.{{ ansible_domain }} to XYZ.{{ ipaserver_domain }}"
+  hostname:
+    name: "{{ ansible_hostname }}.{{ ipaserver_domain }}"

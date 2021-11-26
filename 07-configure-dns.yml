@@ -1,3 +1,4 @@
+---
 - name: add global resolvers to /etc/resolv.conf of all ipa clients
   hosts: ipaclients
   vars_files:

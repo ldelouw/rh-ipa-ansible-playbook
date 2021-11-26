@@ -1,19 +1,19 @@
 ---
-  - name: Add local admins
-    ipauser:
-      ipaadmin_password: "{{ ipaadmin_password }}"
-      name: "{{ _locadm.name }}"
-      first: "{{ _locadm.first }}"
-      last: "{{ _locadm.last }}"
-      password: "{{ _locadm.password }}"
-    loop: "{{ localadmins }}"
-    loop_control:
-      loop_var: _locadm
-  - name: Add local groups
-    ipagroup:
-      ipaadmin_password: "{{ ipaadmin_password }}"
-      name: "{{ _locgrp.name }}"
-      user: "{{ _locgrp.user | default([]) }}"
-    loop: "{{ localgroups }}"
-    loop_control:
-      loop_var: _locgrp
+- name: Add local admins
+  ipauser:
+    ipaadmin_password: "{{ ipaadmin_password }}"
+    name: "{{ _locadm.name }}"
+    first: "{{ _locadm.first }}"
+    last: "{{ _locadm.last }}"
+    password: "{{ _locadm.password }}"
+  loop: "{{ localadmins }}"
+  loop_control:
+    loop_var: _locadm
+- name: Add local groups
+  ipagroup:
+    ipaadmin_password: "{{ ipaadmin_password }}"
+    name: "{{ _locgrp.name }}"
+    user: "{{ _locgrp.user | default([]) }}"
+  loop: "{{ localgroups }}"
+  loop_control:
+    loop_var: _locgrp

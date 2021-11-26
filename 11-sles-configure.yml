@@ -1,3 +1,4 @@
+---
 - hosts: sles_clients
   vars_files:
     - ./vars.yml
