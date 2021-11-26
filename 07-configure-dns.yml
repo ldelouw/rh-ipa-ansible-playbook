@@ -1,0 +1,35 @@
+- name: add global resolvers to /etc/resolv.conf of all ipa clients
+  hosts: ipaclients
+  vars_files:
+    - ./vars.yml
+    - ./secrets.yml
+  tasks:
+    - name: add global resolvers
+      #
+      # TBD: don't rely on hardcoded conn_name
+      #
+      nmcli:
+        conn_name: ens192
+        type: ethernet
+        dns4: "{{ global_dns_resolvers }}"
+        state: present
+      notify: restart_nm
+  handlers:
+    - name: restart_nm
+      systemd:
+        name: NetworkManager
+        state: restarted
+
+- name: add forwardzone
+  hosts: ipaserver
+  vars_files:
+    - ./vars.yml
+    - ./secrets.yml
+  tasks:
+    - ipadnsforwardzone:
+        ipaadmin_password: "{{ ipaadmin_password }}"
+        state: present
+        name: "{{ windows_domain }}"
+        forwarders: "{{ windows_domain_dns_resolvers | json_query('[].{\"ip_address\": @}') }}"
+        forwardpolicy: first
+        skip_overlap_check: true

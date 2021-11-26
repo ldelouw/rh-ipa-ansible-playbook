@@ -17,19 +17,26 @@ domain_prefix: linux
 
 # CA related stuff
 ipareplica_setup_ca: no
+ipaserver_no_pkinit: yes
 ipareplica_no_pkinit: yes
 ipaserver_external_ca: no
-ipareplica_dirsrv_cert_files: /root/{{ ipaserver }}-key-and-crt.pem
-ipareplica_http_cert_files: /root/{{ ipaserver }}-key-and-crt.pem
+ipaserver_dirsrv_cert_files: "/root/{{ ipaserver }}-key-and-crt.pem"
+ipaserver_http_cert_files: "/root/{{ ipaserver }}-key-and-crt.pem"
+ipareplica_dirsrv_cert_files: "/root/{{ ipareplica_server_name }}-key-and-crt.pem"
+ipareplica_http_cert_files: "/root/{{ ipareplica_server_name }}-key-and-crt.pem"
+external_ca_cert_file: /root/ca.crt
 
 # DNS related stuff
 ipaserver_setup_dns: true
 ipareplica_setup_dns: true
 ipaserver_forwarders: 1.1.1.1
-ipareplica_forwarders: {{ ipaserver_forwarders }}
+ipareplica_forwarders: "{{ ipaserver_forwarders }}"
 # Evil, but needed in the lab when using example.com for production usage 
 # remove this
 ipaserver_allow_zone_overlap: true
+ipaserver_no_dnssec_validation: true
+ipareplica_no_dnssec_validation: true
+dns_allow_query_cache_iprange: "10.0.0.0/8"
 
 global_dns_resolvers:
   - 1.2.3.4

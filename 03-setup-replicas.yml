@@ -8,24 +8,16 @@
       state: present
       tags: ipareplica
 
-#    - role: kdcproxy-server
-#      state: present
-#      tags: kdcproxy-server
-#
-#    - role: topology
-#      state: present
-#      tags: topology
-
   pre_tasks:
-    - name: Copy cert file                                                      
-      copy:                                                                     
-        src: files/{{ ipaserver }}-key-and-crt.pem                           
-        dest: /root/{{ ipaserver }}-key-and-crt.pem                          
-                                                                                
-    - name: copy ca.crt                                                         
-      copy:                                                                     
-       src: files/ca.crt                                                       
-       dest: /root/ca.crt 
+
+    - name: Copy cert files
+      copy:
+        src: "files/{{ item | basename }}"
+        dest: "{{ item }}"
+      loop:
+        - "{{ ipareplica_dirsrv_cert_files }}"
+        - "{{ ipareplica_http_cert_files }}"
+        - "{{ external_ca_cert_file }}"
 
     - name: Disable host based firewall
       systemd:
