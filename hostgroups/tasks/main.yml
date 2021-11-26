@@ -1,16 +1,8 @@
 ---
-  - name: Add hostgroup for Database Servers
+  - name: "Add hostgroup for {{ _hostgroup }} Servers"
     ipahostgroup: 
       ipaadmin_password: "{{ ipaadmin_password }}" 
-      name: dbservers
-
-  - name: Add hostgroup for JBoss Servers
-    ipahostgroup: 
-      ipaadmin_password: "{{ ipaadmin_password }}" 
-      name: jboss
-
-  - name: Add hostgroup for Webservers
-    ipahostgroup: 
-      ipaadmin_password: "{{ ipaadmin_password }}" 
-      name: web
-
+      name: "{{ _hostgroup.name }}"
+    loop: "{{ hostgroup_list }}"
+    loop_control:
+      loop_var: _hostgroup
