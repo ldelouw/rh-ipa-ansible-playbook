@@ -1,14 +1,8 @@
+---
 - hosts: ipaserver
   vars_files:
     - ./vars.yml
     - ./secrets.yml
-
-  vars:
-    ipaserver_external_ca: no
-    ipaserver_dirsrv_cert_files: /root/{{ ipaserver }}-key-and-crt.pem
-    ipaserver_http_cert_files: /root/{{ ipaserver }}-key-and-crt.pem
-    ipaserver_no_pkinit: yes
-
   roles:
     - role: ipaserver
       state: present
@@ -16,21 +10,14 @@
   pre_tasks:
     - name: Copy cert files
       copy:
-        src: files/{{ ipaserver }}-key-and-crt.pem
-        dest: /root/{{ ipaserver }}-key-and-crt.pem
-
-    - name: copy ca.crt
-      copy:
-        src: files/ca.crt
-        dest: /root/ca.crt
+        src: "files/{{ item | basename }}"
+        dest: "{{ item }}"
+      loop:
+        - "{{ ipaserver_dirsrv_cert_files }}"
+        - "{{ ipaserver_http_cert_files }}"
+        - "{{ external_ca_cert_file }}"
 
   post_tasks:
-#  - name: Copy CSR /root/ipa.csr from node to "{{ groups.ipaserver[0] + '-ipa.csr' }}"
-#    fetch:
-#      src: /root/ipa.csr
-#      dest: "files/{{ groups.ipaserver[0] + '-ipa.csr' }}"
-#      flat: yes
-#    tags: csr
 
   - name: Disable host based firewall
     systemd:

@@ -17,10 +17,14 @@ domain_prefix: linux
 
 # CA related stuff
 ipareplica_setup_ca: no
+ipaserver_no_pkinit: yes
 ipareplica_no_pkinit: yes
 ipaserver_external_ca: no
-ipareplica_dirsrv_cert_files: /root/{{ ipaserver }}-key-and-crt.pem
-ipareplica_http_cert_files: /root/{{ ipaserver }}-key-and-crt.pem
+ipaserver_dirsrv_cert_files: "/root/{{ ipaserver }}-key-and-crt.pem"
+ipaserver_http_cert_files: "/root/{{ ipaserver }}-key-and-crt.pem"
+ipareplica_dirsrv_cert_files: "/root/{{ ipareplica_server_name }}-key-and-crt.pem"
+ipareplica_http_cert_files: "/root/{{ ipareplica_server_name }}-key-and-crt.pem"
+external_ca_cert_file: /root/ca.crt
 
 # DNS related stuff
 ipaserver_setup_dns: true
