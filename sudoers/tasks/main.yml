@@ -17,3 +17,36 @@
       action: sudorule
       state: present
     tags: sudoers
+
+  - name: Add all pre-defined sudo commands
+    ipasudocmd:
+      ipaadmin_password: "{{ ipaadmin_password }}"
+      name: "{{ _sudocmd.name }}"
+      description: "{{ _sudocmd.description | default('N/A') }}"
+    loop: "{{ sudocommandgroups | map(attribute='command_list')|flatten|list }}"
+    loop_control:
+      loop_var: _sudocmd
+
+  - name: Add all pre-defined sudo command groups
+    ipasudocmdgroup:
+      ipaadmin_password: "{{ ipaadmin_password }}"
+      name: "{{ _sudocmdgrp.name }}"
+      description: "{{ _sudocmdgrp.description | default('N/A') }}"
+      sudocmd: "{{ _sudocmdgrp.command_list|map(attribute='name')|list }}"
+    loop: "{{ sudocommandgroups }}"
+    loop_control:
+      loop_var: _sudocmdgrp
+
+  - name: Add all pre-defined sudo rules
+    ipasudorule:
+      ipaadmin_password: "{{ ipaadmin_password }}"
+      name: "{{ _sudorule.name }}"
+      description: "{{ _sudorule.description | default('N/A') }}"
+      sudooption:
+        - '!authenticate'
+      hostcategory: all
+      group: "{{ _sudorule.usergroup }}"
+      allow_sudocmdgroup: "{{ _sudorule.allow_sudocmdgroup }}"
+    loop: "{{ sudorules }}"
+    loop_control:
+      loop_var: _sudorule

@@ -1,0 +1,10 @@
+- hosts: ipaserver
+  vars_files:
+    - ./vars.yml
+    - ./secrets.yml
+
+  roles:
+    - role: usergroup-mappings
+      state: present
+      tags: usergroup-mappings
+

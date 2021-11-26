@@ -1,0 +1,26 @@
+---
+- name: prepare for AD trust
+  hosts:
+    - ipaserver
+    - ipareplicas
+  vars_files:
+    - ./vars.yml
+    - ./secrets.yml
+  tasks:
+    - name: "allow query cache for all clients"
+      lineinfile:
+        path: /etc/named/ipa-options-ext.conf
+        line: 'allow-query-cache { 127.0.0.1; {{ dns_allow_query_cache_iprange }}; };'
+        regexp: '^allow-query-cache'
+        state: present
+      register: _lifout
+    - name: restart named
+      systemd:
+        name: named-pkcs11
+        state: restarted
+      when: _lifout.changed | bool
+    - name: "Trust needs to be added manualy..."
+      debug:
+        msg:
+          - "create trust and trust secret on AD side"
+          - "run ipa trust-add {{ windows_realm }} --type=ad --trust-secret"

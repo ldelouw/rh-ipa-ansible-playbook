@@ -1,35 +1,19 @@
 ---
-  - name: Add user hmuster
+  - name: Add local admins
     ipauser:
       ipaadmin_password: "{{ ipaadmin_password }}"
-      name: jdoe
-      first: Jane
-      last: Doe
-      password: "Willkommen"
-
-  - name: Add user jbond
-    ipauser:
-      ipaadmin_password: "{{ ipaadmin_password }}"
-      name: jbond
-      first: James
-      last: Bond
-      password: "Willkommen"
-
-  - name: Add hmuster and jbond to admin user group
+      name: "{{ _locadm.name }}"
+      first: "{{ _locadm.first }}"
+      last: "{{ _locadm.last }}"
+      password: "{{ _locadm.password }}"
+    loop: "{{ localadmins }}"
+    loop_control:
+      loop_var: _locadm
+  - name: Add local groups
     ipagroup:
       ipaadmin_password: "{{ ipaadmin_password }}"
-      name: admins
-      user:
-        - jdoe
-        - jbond
-        - admin
-
-  - name: Add hmuster and jbond to superusers group
-    ipagroup:
-      ipaadmin_password: "{{ ipaadmin_password }}"
-      name: superusers
-      user:
-        - jdoe
-        - jbond
-
-
+      name: "{{ _locgrp.name }}"
+      user: "{{ _locgrp.user | default([]) }}"
+    loop: "{{ localgroups }}"
+    loop_control:
+      loop_var: _locgrp

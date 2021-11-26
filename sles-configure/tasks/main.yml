@@ -20,7 +20,7 @@
 
   - name: Copy krb5.keytab
     copy:
-      src: files/{{ ansible_host }}.keytab
+      src: "files/{{ ansible_host }}.keytab"
       dest: /etc/krb5.keytab
       mode: 0600
 
@@ -52,7 +52,7 @@
 
   - name: Fetch ca.crt from the IPA server
     uri:
-      url: http://{{ ipaserver }}/ipa/config/ca.crt
+      url: "http://{{ ipaserver }}/ipa/config/ca.crt"
       dest: /etc/ipa/ca.crt
       force: yes
       status_code:
