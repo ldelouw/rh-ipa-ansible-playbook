@@ -30,10 +30,13 @@ external_ca_cert_file: /root/ca.crt
 ipaserver_setup_dns: true
 ipareplica_setup_dns: true
 ipaserver_forwarders: 1.1.1.1
-ipareplica_forwarders: {{ ipaserver_forwarders }}
+ipareplica_forwarders: "{{ ipaserver_forwarders }}"
 # Evil, but needed in the lab when using example.com for production usage 
 # remove this
 ipaserver_allow_zone_overlap: true
+ipaserver_no_dnssec_validation: true
+ipareplica_no_dnssec_validation: true
+dns_allow_query_cache_iprange: "10.0.0.0/8"
 
 global_dns_resolvers:
   - 1.2.3.4
