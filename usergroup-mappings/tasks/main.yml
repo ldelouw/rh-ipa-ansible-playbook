@@ -1,25 +1,32 @@
 ---
 # tasks file for usergroup-mappings
 
-- name: Add group ad_users
+- name: "Add IPA groups"
   ipagroup:
     ipaadmin_password: "{{ ipaadmin_password }}"
-    name: ad_users
+    name: "{{ _ugmap.ipagroup | default(_ugmap.name) }}"
+    description: "{{ _ugmap.description }}"
+  loop: "{{ usergroup_mappings }}"
+  loop_control:
+    loop_var: _ugmap
 
-- name: Add group ad_users_ext
+- name: "Add IPA external group {{ _ugmap.name }}_ext"
   ipagroup:
     ipaadmin_password: "{{ ipaadmin_password }}"
-    name: ad_users_ext
+    name: "{{ _ugmap.name }}_ext"
+    description: "{{ _ugmap.description }} (external)"
     external: yes
     externalmember: 
-    - "'{{ windows_realm}}'\\Domain Users"
-    - "'{{ windows_realm }}'\\test"
+      - "{{ _ugmap.name }}@{{ windows_domain }}"
+  loop: "{{ usergroup_mappings }}"
+  loop_control:
+    loop_var: _ugmap
 
-- name: Add group ad_users_ext to ad_users
+- name: "Add AD group {{ _ugmap.name }} to IPA group {{ _ugmap.name }}"
   ipagroup:
     ipaadmin_password: "{{ ipaadmin_password }}"
-    name: ad_users
-    group: ad_users_ext
-
-
-
+    name: "{{ _ugmap.ipagroup | default(_ugmap.name) }}"
+    group: "{{ _ugmap.name }}_ext"
+  loop: "{{ usergroup_mappings }}"
+  loop_control:
+    loop_var: _ugmap
