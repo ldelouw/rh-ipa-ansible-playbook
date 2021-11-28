@@ -1,3 +1,4 @@
+---
 - hosts: ipaserver
   vars_files:
     - ./vars.yml
@@ -23,5 +24,3 @@
     - role: sudoers
       state: absent
       tags: sudoers
-
-

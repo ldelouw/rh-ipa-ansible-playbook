@@ -18,9 +18,8 @@
         - "{{ external_ca_cert_file }}"
 
   post_tasks:
-
-  - name: Disable host based firewall
-    systemd:
-      state: stopped
-      enabled: no
-      name: firewalld
+    - name: Disable host based firewall
+      systemd:
+        state: stopped
+        enabled: false
+        name: firewalld

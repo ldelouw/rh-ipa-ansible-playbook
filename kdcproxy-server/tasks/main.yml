@@ -1,12 +1,11 @@
 ---
-  - name: Configure Kerberos Proxy to use DNS
-    lineinfile:
-      path: /etc/ipa/kdcproxy/kdcproxy.conf
-      regexp: '^use_dns = false'
-      line: 'use_dns = true'
+- name: Configure Kerberos Proxy to use DNS
+  lineinfile:
+    path: /etc/ipa/kdcproxy/kdcproxy.conf
+    regexp: '^use_dns = false'
+    line: 'use_dns = true'
 
-  - name: Restart Services
-    systemd:
-      name: ipa.service
-      state: restarted
-
+- name: Restart Services
+  systemd:
+    name: ipa.service
+    state: restarted

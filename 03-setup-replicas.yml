@@ -1,3 +1,4 @@
+---
 - hosts: ipareplicas
   vars_files:
     - ./vars.yml
@@ -22,5 +23,5 @@
     - name: Disable host based firewall
       systemd:
         state: stopped
-        enabled: no
+        enabled: false
         name: firewalld

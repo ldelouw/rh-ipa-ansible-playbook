@@ -1,8 +1,8 @@
 ---
-  - name: "Add hostgroup for {{ _hostgroup }} Servers"
-    ipahostgroup: 
-      ipaadmin_password: "{{ ipaadmin_password }}" 
-      name: "{{ _hostgroup.name }}"
-    loop: "{{ hostgroup_list }}"
-    loop_control:
-      loop_var: _hostgroup
+- name: "Add hostgroup for {{ _hostgroup }} Servers"
+  ipahostgroup:
+    ipaadmin_password: "{{ ipaadmin_password }}"
+    name: "{{ _hostgroup.name }}"
+  loop: "{{ hostgroup_list }}"
+  loop_control:
+    loop_var: _hostgroup

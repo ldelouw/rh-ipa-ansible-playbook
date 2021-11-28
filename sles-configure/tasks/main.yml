@@ -1,109 +1,106 @@
 ---
+- name: Install Kerberos and related stuff
+  package:
+    state: installed
+    name:
+      - krb5
+      - krb5-client
+      - sssd-krb5
+      - libipa_hbac0
+      - sssd-krb5-common
+      - sssd-ipa
+      - sssd-tools
+      - sssd-ad
 
-  - name: Install Kerberos and related stuff
-    package:
-      state: installed
-      name: 
-        - krb5
-        - krb5-client
-        - sssd-krb5
-        - libipa_hbac0
-        - sssd-krb5-common
-        - sssd-ipa
-        - sssd-tools
-        - sssd-ad
+- name: name services caching daemon
+  package:
+    state: removed
+    name: nscd
 
-  - name: name services caching daemon
-    package:
-      state: removed
-      name: nscd
+- name: Copy krb5.keytab
+  copy:
+    src: "files/{{ ansible_host }}.keytab"
+    dest: /etc/krb5.keytab
+    mode: 0600
 
-  - name: Copy krb5.keytab
-    copy:
-      src: "files/{{ ansible_host }}.keytab"
-      dest: /etc/krb5.keytab
-      mode: 0600
+- name: Add /usr/lib/mit/bin/ to roots PATH
+  shell: echo "PATH=$PATH:/usr/lib/mit/bin/" >> /root/.bash_profile
 
-  - name: Add /usr/lib/mit/bin/ to roots PATH
-    shell: echo "PATH=$PATH:/usr/lib/mit/bin/" >> /root/.bash_profile
+- name: Generate krb5.conf Template to destination
+  template:
+    src: templates/krb5.conf.j2
+    dest: /etc/krb5.conf
 
-  - name: Generate krb5.conf Template to destination
-    template:
-      src: templates/krb5.conf.j2
-      dest: /etc/krb5.conf
+- name: Generate sssd.conf from Template
+  template:
+    src: templates/sssd.conf.j2
+    dest: /etc/sssd/sssd.conf
+    mode: 0600
 
-  - name: Generate sssd.conf from Template
-    template:
-      src: templates/sssd.conf.j2
-      dest: /etc/sssd/sssd.conf
-      mode: 0600
+- name: Enable and restart sssd
+  service:
+    name: sssd
+    state: restarted
+    enabled: true
 
-  - name: Enable and restart sssd
-    service: 
-      name: sssd
-      state: restarted
-      enabled: yes
+- name: Create directory /etc/ipa
+  file:
+    path: /etc/ipa
+    state: directory
+    mode: '0755'
 
-  - name: Create directory /etc/ipa
-    file: 
-      path: /etc/ipa
-      state: directory
-      mode: '0755'
+- name: Fetch ca.crt from the IPA server
+  uri:
+    url: "http://{{ ipaserver }}/ipa/config/ca.crt"
+    dest: /etc/ipa/ca.crt
+    force: true
+    status_code:
+      - 200
+      - 304
 
-  - name: Fetch ca.crt from the IPA server
-    uri:
-      url: "http://{{ ipaserver }}/ipa/config/ca.crt"
-      dest: /etc/ipa/ca.crt
-      force: yes
-      status_code:
-        - 200
-        - 304
+- name: Enable PAM-sssd
+  shell: pam-config --add --sss
 
-  - name: Enable PAM-sssd
-    shell: pam-config --add --sss
+- name: Enable automatic home directory creation on first login
+  shell: pam-config --add --mkhomedir --mkhomedir-umask=0077
 
-  - name: Enable automatic home directory creation on first login
-    shell: pam-config --add --mkhomedir --mkhomedir-umask=0077
+- name: Enable sss for passwd in /etc/nsswitch.conf
+  lineinfile:
+    path: /etc/nsswitch.conf
+    state: present
+    regexp: '^passwd'
+    line: 'passwd: compat sss'
 
-  - name: Enable sss for passwd in /etc/nsswitch.conf
-    lineinfile:
-      path: /etc/nsswitch.conf
-      state: present
-      regexp: '^passwd'
-      line: 'passwd: compat sss'
+- name: Enable sss for shadow in /etc/nsswitch.conf
+  lineinfile:
+    path: /etc/nsswitch.conf
+    state: present
+    regexp: '^shadow'
+    line: 'shadow: compat sss'
 
-  - name: Enable sss for shadow in /etc/nsswitch.conf
-    lineinfile:
-      path: /etc/nsswitch.conf
-      state: present
-      regexp: '^shadow'
-      line: 'shadow: compat sss'
+- name: Enable sss for groups in /etc/nsswitch.conf
+  lineinfile:
+    path: /etc/nsswitch.conf
+    state: present
+    regexp: '^group'
+    line: 'group: compat sss'
 
-  - name: Enable sss for groups in /etc/nsswitch.conf
-    lineinfile:
-      path: /etc/nsswitch.conf
-      state: present
-      regexp: '^group'
-      line: 'group: compat sss'
+- name: Enable sss for sudoers in /etc/nsswitch.conf
+  lineinfile:
+    path: /etc/nsswitch.conf
+    state: present
+    insertafter: '^services'
+    line: 'sudoers: files sss'
 
-  - name: Enable sss for sudoers in /etc/nsswitch.conf
-    lineinfile:
-      path: /etc/nsswitch.conf
-      state: present
-      insertafter: '^services'
-      line: 'sudoers: files sss'
+- name: Enable GSSAPIAuthentication for sshd
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#GSSAPIAuthentication no'
+    line: 'GSSAPIAuthentication yes'
+    state: present
 
-  - name: Enable GSSAPIAuthentication for sshd
-    lineinfile:
-      path: /etc/ssh/sshd_config
-      regexp: '^#GSSAPIAuthentication no'
-      line: 'GSSAPIAuthentication yes'
-      state: present
-
-  - name: Enable and restart sshd
-    service: 
-      name: sshd
-      state: restarted
-      enabled: yes
-
-
+- name: Enable and restart sshd
+  service:
+    name: sshd
+    state: restarted
+    enabled: true
