@@ -3,24 +3,17 @@
   ipahbacrule:
     ipaadmin_password: "{{ ipaadmin_password }}"
     name: "{{ _hbrule.name }}"
-    description: "{{ _hbrule.description }}"
-    hostcategory: "{{ _hbrule.hostcategory }}"
-    servicecategory: "{{ _hbrule.servicecategory | default('all') }}"
-    group: "{{ _hbrule.group }}"
+    description: "{{ _hbrule.description | default(omit)}}"
+    group: "{{ _hbrule.group | default(omit)}}"
+    hbacsvc: "{{ _hbrule.hbacsvc | default(omit) }}"
+    hbacsvcgroup: "{{ _hbrule.hbacsvcgroup | default(omit) }}"
+    host: "{{ _hbrule.host | default(omit) }}"
+    hostcategory: "{{ _hbrule.hostcategory | default(omit)}}"
+    hostgroup: "{{ _hbrule.hostgroup | default(omit) }}"
+    servicecategory: "{{ _hbrule.servicecategory | default(omit) }}"
+    state: "{{ _hbrule.state | default(omit) }}"
+    user: "{{ _hbrule.user | default(omit) }}"
+    usercategory: "{{ _hbrule.usercategory | default(omit) }}"
   loop: "{{ hbacrule_list }}"
   loop_control:
     loop_var: _hbrule
-  when: _hbrule.hostcategory is defined
-
-- name: add hbac rules
-  ipahbacrule:
-    ipaadmin_password: "{{ ipaadmin_password }}"
-    name: "{{ _hbrule.name }}"
-    description: "{{ _hbrule.description }}"
-    hostgroup: "{{ _hbrule.hostgroup | default('') }}"
-    servicecategory: "{{ _hbrule.servicecategory | default('all') }}"
-    group: "{{ _hbrule.group }}"
-  loop: "{{ hbacrule_list }}"
-  loop_control:
-    loop_var: _hbrule
-  when: _hbrule.hostgroup is defined

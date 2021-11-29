@@ -95,27 +95,31 @@ hostgroup_list:
 # HBAC rules:
 hbacrule_list:
   - name: allow_all
-    enabled: false
+    state: disabled
   - name: allow_webadmins_webservers
     description: Allow web administrators to login to webserver systems
     group: webadmins
     hostgroup: webserver
-    enabled: true
+    servicecategory: "all"
+    state: present
   - name: allow_dbadmins_dbservers
     description: Allow databse administrators to login to database systems
     group: dbadmins
     hostgroup: dbserver
-    enabled: true
+    servicecategory: "all"
+    state: present
   - name: allow_admins_ipaservers
     description: Allow members of admins group to login to IPA servers
     group: admins
     hostgroup: ipaservers
-    enabled: true
+    servicecategory: "all"
+    state: present
   - name: allow_superusers_all
     description: Allow members of superusers group to login to all servers in IPA domain
     group: superusers
+    servicecategory: "all"
     hostcategory: "all"
-    enabled: true
+    state: present
 
 # Sudo related stuff:
 sudocommandgroups:
