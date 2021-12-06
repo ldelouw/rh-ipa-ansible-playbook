@@ -6,6 +6,7 @@
     first: "{{ _locadm.first }}"
     last: "{{ _locadm.last }}"
     password: "{{ _locadm.password }}"
+    update_password: on_create
   loop: "{{ localadmins }}"
   loop_control:
     loop_var: _locadm
