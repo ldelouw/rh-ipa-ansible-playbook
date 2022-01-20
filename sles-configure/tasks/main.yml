@@ -24,16 +24,25 @@
     mode: 0600
 
 - name: Add /usr/lib/mit/bin/ to roots PATH
-  shell: echo "PATH=$PATH:/usr/lib/mit/bin/" >> /root/.bash_profile
+  copy:
+    dest: /etc/profile.d/mit-krb5.sh
+    content: |
+      PATH=$PATH:/usr/lib/mit/bin/
+    mode: 0644
 
 - name: Generate krb5.conf Template to destination
   template:
-    src: templates/krb5.conf.j2
+    src: krb5.conf.j2
     dest: /etc/krb5.conf
+
+- name: Generate ldap.conf from template
+  template:
+    src: ldap.conf.j2
+    dest: /etc/openldap/ldap.conf
 
 - name: Generate sssd.conf from Template
   template:
-    src: templates/sssd.conf.j2
+    src: sssd.conf.j2
     dest: /etc/sssd/sssd.conf
     mode: 0600
 
@@ -49,14 +58,11 @@
     state: directory
     mode: '0755'
 
-- name: Fetch ca.crt from the IPA server
-  uri:
-    url: "http://{{ ipaserver }}/ipa/config/ca.crt"
+- name: Copy ca.crt
+  copy:
+    src: "{{ external_ca_cert_file }}"
     dest: /etc/ipa/ca.crt
-    force: true
-    status_code:
-      - 200
-      - 304
+    mode: 0644
 
 - name: Enable PAM-sssd
   shell: pam-config --add --sss
