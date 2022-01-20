@@ -67,6 +67,9 @@ localgroups:
       - jdoe
   - name: webadmins
   - name: dbadmins
+  - name: admins
+    group:
+      - superusers
 
 localadmins:
   - name: jbond
