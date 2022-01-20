@@ -1,25 +1,21 @@
 ---
   - name: Create host
-    ipa_host:
+    ipahost:
+      ipaadmin_password: "{{ ipaadmin_password }}"
       name: "{{ item.name }}"
       ip_address: "{{ item.ip }}"
-      ipa_user: admin
-      ipa_pass: "{{ ipaadmin_password }}"
-      ipa_host: "{{ ipaserver }}"
       state: present
     loop: "{{ sles_client }}"
 
   # Dirty, dirty hack
   - name: Create admin Kerberos Ticket
-    shell: echo "{{ ipaadmin_password }}"|kinit admin
+    shell: |
+      export KRB5CCNAME=FILE:/tmp/krb5cc_sles-enrollment$$
+      echo "{{ ipaadmin_password }}"|kinit admin
+      ipa-getkeytab -s {{ ipaserver }} -p host/{{ item.name }}@{{ ipaserver_realm }} -k /tmp/{{ item.name }}.keytab
+      kdestroy
     no_log: true
-
-  - name: Create krb5.keytab
-    shell: ipa-getkeytab -s {{ ipaserver }} -p host/{{ item.name }}@{{ ipaserver_realm }} -k /tmp/{{ item.name }}.keytab
     loop: "{{ sles_client }}"
-
-  - name: Destroy Kerberos Ticket
-    shell: kdestroy
 
   - name: Fetch krb5.keytab
     fetch:
