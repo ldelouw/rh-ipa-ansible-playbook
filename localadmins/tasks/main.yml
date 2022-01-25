@@ -14,7 +14,8 @@
   ipagroup:
     ipaadmin_password: "{{ ipaadmin_password }}"
     name: "{{ _locgrp.name }}"
-    user: "{{ _locgrp.user | default([]) }}"
+    user: "{{ _locgrp.user | default(omit) }}"
+    group: "{{ _locgrp.group | default(omit) }}"
   loop: "{{ localgroups }}"
   loop_control:
     loop_var: _locgrp

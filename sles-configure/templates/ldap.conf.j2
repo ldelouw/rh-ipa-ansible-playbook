@@ -1,0 +1,5 @@
+SASL_NOCANON on
+URI ldaps://{{ ipaserver }}
+BASE dc={{ ipaserver_domain.split('.') |join(',dc=') }}
+TLS_CACERT /etc/ipa/ca.crt
+SASL_MECH GSSAPI

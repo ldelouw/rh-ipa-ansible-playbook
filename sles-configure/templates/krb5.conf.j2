@@ -3,7 +3,6 @@
   module = sssd:/usr/lib64/sssd/modules/sssd_krb5_localauth_plugin.so
  }
 
-
 [libdefaults]
   default_realm = {{ ipaserver_realm }}
   dns_lookup_realm = true
@@ -23,18 +22,17 @@
 
   }
 
-[{{ ipaserver_realm }}]
+[domain_realm]
   .{{ ipaserver_domain }} = {{ ipaserver_realm }}
   {{ ipaserver_domain }} = {{ ipaserver_realm }}
   {{ ansible_host }} = {{ ipaserver_realm }}
+  .{{ windows_domain }} = {{ windows_realm }}
+  {{ windows_domain }} = {{ windows_realm }}
 
-[domain_realm]
-.{{ windows_domain }} = {{ windows_realm }}
-{{ windows_domain }} = {{ windows_realm }}
 [capaths]
-{{ windows_realm }} = {
-  {{ ipaserver_realm }} = {{ windows_realm }}
-}
-{{ ipaserver_realm }} = {
-  {{ windows_realm }} = {{ windows_realm }}
-}
+  {{ windows_realm }} = {
+    {{ ipaserver_realm }} = {{ windows_realm }}
+  }
+  {{ ipaserver_realm }} = {
+    {{ windows_realm }} = {{ windows_realm }}
+  }

@@ -1,23 +1,4 @@
 ---
-  - name: Add /bin/bash as sudoers command
-    ipasudocmd:
-      ipaadmin_password: "{{ ipaadmin_password }}"
-      name: /bin/bash
-      state: present
-
-  - name: Add sudoers rule for superusers to be able to get a root shell on all hosts
-    ipasudorule:
-      ipaadmin_password: "{{ ipaadmin_password }}"
-      name: allow-superusers_sudo-i
-      allow_sudocmd:
-      - /bin/bash
-      sudooption: "!authenticate"
-      group: superusers
-      runasuser: root
-      action: sudorule
-      state: present
-    tags: sudoers
-
   - name: Add all pre-defined sudo commands
     ipasudocmd:
       ipaadmin_password: "{{ ipaadmin_password }}"
@@ -46,7 +27,8 @@
         - '!authenticate'
       hostcategory: all
       group: "{{ _sudorule.usergroup }}"
-      allow_sudocmdgroup: "{{ _sudorule.allow_sudocmdgroup }}"
+      allow_sudocmdgroup: "{{ _sudorule.allow_sudocmdgroup | default(omit) }}"
+      cmdcategory: "{{ _sudorule.cmdcategory | default(omit) }}"
     loop: "{{ sudorules }}"
     loop_control:
       loop_var: _sudorule
