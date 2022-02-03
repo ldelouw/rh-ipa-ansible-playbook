@@ -160,3 +160,12 @@ sudorules:
     description: Allow database administrators to manage database servers
     usergroup: dbadmins
     allow_sudocmdgroup: dbadmincommands
+
+iparole_list:
+  - name: my_ipa_admins
+    description: Example IPA Admins
+    usergroup:
+      - superusers
+    privileges:
+      - User Administrators
+      - Group Administrators
