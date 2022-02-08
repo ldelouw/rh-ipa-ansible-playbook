@@ -1,0 +1,15 @@
+---
+# Ensure roles with certain details
+- ipa_role:
+    name: "{{ _iparole.name }}"
+    ipa_pass: "{{ ipaadmin_password }}"
+    ipa_user: "{{ ipaadmin_principal }}"
+    ipa_host: "{{ ipaserver }}"
+    description: "{{ _iparole.description | default(omit) }}"
+    group: "{{ _iparole.usergroup | default(omit) }}"
+    privilege: "{{ _iparole.privilege | default(omit) }}"
+  loop: "{{ iparole_list }}"
+  loop_control:
+    loop_var: _iparole
+
+
