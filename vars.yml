@@ -93,7 +93,15 @@ usergroup_mappings:
 # Hostgroups:
 hostgroup_list:
   - name: dbserver
+    description: Database Server
+    host:
+      - db01.example.com
+      - db02.example.com
   - name: webserver
+    description: Web Server
+      - web01.example.com
+      - web02.example.com
+      - web03.example.com
 
 # HBAC rules:
 hbacrule_list:
