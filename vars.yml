@@ -32,8 +32,8 @@ ipaserver_setup_dns: true
 ipareplica_setup_dns: true
 ipaserver_forwarders: 1.1.1.1
 ipareplica_forwarders: "{{ ipaserver_forwarders }}"
-# Evil, but needed in the lab when using example.com for production usage
-# remove this
+# Evil, but needed in the lab when using example.com. Remove this for
+# production usage
 ipaserver_allow_zone_overlap: true
 ipaserver_no_dnssec_validation: true
 ipareplica_no_dnssec_validation: true
