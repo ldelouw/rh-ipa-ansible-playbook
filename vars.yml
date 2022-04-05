@@ -1,10 +1,10 @@
 ---
 # Realms and domain settings
-windows_realm: WIN.EXAMPLE.COM
 windows_domain: win.example.com
-ipaserver_realm: EXAMPLE.COM
+windows_realm: "{{ windows_domain | upper }}"
 ipaserver_domain: example.com
-ipareplica_domain: example.com
+ipaserver_realm: "{{ ipaserver_domain | upper }}"
+ipareplica_domain: "{{ ipaserver_domain }}"
 
 # Server and replica related stuff
 ipaadmin_principal: admin
