@@ -40,12 +40,12 @@ ipareplica_no_dnssec_validation: true
 dns_allow_query_cache_iprange: "10.0.0.0/8"
 
 global_dns_resolvers:
-  - 1.2.3.4
-  - 1.2.3.5
+  - 1.1.1.1
+  - 9.9.9.9
 
 windows_domain_dns_resolvers:
-  - 1.2.3.6
-  - 1.2.3.7
+  - 8.8.8.8
+  - 8.8.4.4
 
 # Client related stuff
 ipaclient_mkhomedir: true
