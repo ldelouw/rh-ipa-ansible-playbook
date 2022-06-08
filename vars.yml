@@ -21,6 +21,8 @@ ipareplica_setup_ca: false
 ipaserver_no_pkinit: true
 ipareplica_no_pkinit: true
 ipaserver_external_ca: false
+
+# Remove the following lines when not using an external CA
 ipaserver_dirsrv_cert_files: "/root/{{ ipaserver }}-key-and-crt.pem"
 ipaserver_http_cert_files: "/root/{{ ipaserver }}-key-and-crt.pem"
 ipareplica_dirsrv_cert_files: "/root/{{ ipareplica_server_name }}-key-and-crt.pem"
