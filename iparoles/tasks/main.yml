@@ -1,6 +1,6 @@
 ---
 # Ensure roles with certain details
-- ipa_role:
+- iparole:
     name: "{{ _iparole.name }}"
     ipa_pass: "{{ ipaadmin_password }}"
     ipa_user: "{{ ipaadmin_principal }}"
@@ -11,5 +11,3 @@
   loop: "{{ iparole_list }}"
   loop_control:
     loop_var: _iparole
-
-
