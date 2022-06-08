@@ -16,6 +16,7 @@
         - "{{ ipaserver_dirsrv_cert_files }}"
         - "{{ ipaserver_http_cert_files }}"
         - "{{ external_ca_cert_file }}"
+      when: ipaserver_external_ca | bool
 
   post_tasks:
     - name: Disable host based firewall

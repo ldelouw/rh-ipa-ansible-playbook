@@ -19,6 +19,7 @@
         - "{{ ipareplica_dirsrv_cert_files }}"
         - "{{ ipareplica_http_cert_files }}"
         - "{{ external_ca_cert_file }}"
+      when: ipaserver_external_ca | bool
 
     - name: Disable host based firewall
       systemd:
