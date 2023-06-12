@@ -34,3 +34,4 @@
         forwarders: "{{ windows_domain_dns_resolvers | json_query('[].{\"ip_address\": @}') }}"
         forwardpolicy: first
         skip_overlap_check: true
+      when: windows_domain_dns_resolvers is defined
