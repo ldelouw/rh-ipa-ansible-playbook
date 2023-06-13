@@ -11,6 +11,7 @@ ipaadmin_principal: admin
 ipaserver: ipa1.example.com
 ipareplica_server_name: ipa2.example.com
 ipaserver_setup_adtrust: true
+ipaserver_setup_firewalld: false
 ipareplica_setup_adtrust: true
 ipareplica_setup_firewalld: false
 ipareplica_install_packages: true
