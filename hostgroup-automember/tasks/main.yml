@@ -1,0 +1,17 @@
+---
+  - name: Hostgroup automembers
+    ipaautomember:
+      ipaadmin_password: "{{ ipaadmin_password }}"
+      name: "{{ item.name }}"
+      automember_type: hostgroup
+      #action: member
+      inclusive:
+        - key: "{{ item.key }}"
+          expression: "{{ item.expression }}"
+    loop: "{{ hostgroup_automembers }}"
+
+  - name: Rebuild hostgroup memberships
+    ipaautomember:
+      ipaadmin_password: "{{ ipaadmin_password }}"
+      automember_type: hostgroup
+      state: rebuilt

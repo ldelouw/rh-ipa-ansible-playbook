@@ -180,3 +180,12 @@ iparole_list:
     privileges:
       - User Administrators
       - Group Administrators
+
+# Hostgroup Automember Rules                                                    
+hostgroup_automembers:                                                          
+- name: "webserver"
+  key: "fqdn"                                                                   
+  expression: "www.*"                                                           
+- name: "dbserver"                                                              
+  key: "userclass"                                                              
+  expression: 'Some/Host/Group/From/Satellite/DBServers'

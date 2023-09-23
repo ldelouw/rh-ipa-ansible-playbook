@@ -1,0 +1,9 @@
+- hosts: ipaserver
+  vars_files:
+    - ./vars.yml
+    - ./secrets.yml
+
+  roles:
+    - role: hostgroup-automember
+      state: present
+      tags: hostgroup-automember
